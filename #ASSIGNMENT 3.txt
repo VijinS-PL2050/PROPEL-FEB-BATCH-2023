@@ -1,0 +1,138 @@
+#ASSIGNMENT :3
+
+
+#1 Write a function to check wether input string is palindrome.
+
+#method 1
+
+#Using lists and reverse() method
+
+def isPalindrome(s):
+	x=list(s)
+	y=[]
+	y.extend(x)
+	x.reverse()
+	if(x==y):
+		return True
+	return False
+
+s = str(input('enter a word'))
+s.lower()
+ans = isPalindrome(s)
+print(ans)
+if ans:
+	print("Yes")
+
+else:
+	print("No")
+
+#method 2
+
+def palindrome(c):
+	l=len(c)
+	#print(c[1:- 1])
+	if l<2:
+		return True
+	elif c[0]==c[-1]:
+		return palindrome(c[1:-1]) #recursive funtn
+	else:
+		return False
+
+s=str(input('enter the word'))
+c=s.lower()
+print(c)
+#print(palindrome( c))
+d= palindrome(c)
+if d:
+	print('GIVEN STRING IS PALINDROME')
+else:
+	print('GIVEN STRING IS NOT PALINDROME')
+
+#mthod 3
+
+a=str(input('input ur word'))
+d=a.lower()
+def palindrome(d):
+    if d== d[::-1]: #[::-1] reversing the variable
+       print(d,'is palindrome')
+    else:
+      return print(d,'no')
+palindrome(d)
+
+
+#2 write a funtion to find the factorial of a number.
+
+#1
+
+def factorial(f):
+	x=1
+	if f==0:
+		print('factorial of zero is 1')
+		return
+	else:
+		for i in range(1,f+1):
+			   x=x*i
+	print(f'factorial of {f} is',x )
+	return
+f = int(input('enter a number'))
+
+factorial(f)
+
+#2
+
+
+def fact(f):
+	if f==0:
+		return 1
+	elif f==1:
+		return 1
+	else:
+		x = f*fact(f-1) #recursive function
+		print(x)
+		return x #(f*fact(f-1))
+num = int(input('enter a number'))
+result= fact(num)
+print(f'factorial of {num}is',result)
+
+"""
+#3 write a function to find the fibonacci series of the number.
+"""
+#method 1
+
+def fib(num):
+	l=[0]
+	a,b=0,1 #a=0 b=1
+	for i in range(num):
+		a,b = b,a+b #a=b  b=a+b
+		l.append(a)
+	return l
+print(fib(int(input('Enter The Number'))))
+
+def fib(num):
+	l=[0]
+	a,b=0,1 #a=0 b=1
+	for i in range(num):
+		c=a+b #a=b  b=a+b
+		a=b
+		b=c
+		l.append(a)
+	return l
+print(fib(int(input('Enter The Number'))))
+
+
+#method 2
+
+def fibFind(num):
+	if num==0:
+		return 0
+	elif num==1:
+		return 1
+	else:
+		return (fibFind(num-2)+fibFind(num-1))
+num=int(input('enter a number'))
+
+for i in range(0,num):
+	 print(fibFind(i))
+
+"""
+
