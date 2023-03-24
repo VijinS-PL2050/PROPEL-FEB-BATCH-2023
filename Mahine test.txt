@@ -1,0 +1,124 @@
+
+
+================================================================
+
+
+CREATE TABLE computer(
+     SerilNumber int primary key,
+     MfName varchar(20),
+     Model varchar(16),
+     Weight number,
+     EmployeeId int,
+     use varchar(6) not null,
+     CONSTRAINT em_C1 FOREIGN KEY(EmployeeId) REFERENCES employee(EmployeeId),
+     CONSTRAINT mf_c1 FOREIGN KEY(MfName) REFERENCES manufacturer(MfName));
+
+CREATE TABLE employee(
+      EmployeeId int primary key,
+      EmpName varchar(10) not null,
+      Phone number(10) unique,
+      Email varchar(20) unique,
+      area_code int);
+
+
+CREATE TABLE manufacturer(
+      MfName varchar(15) primary key,
+      City varchar(15),
+      State varchar(15));
+
+
+INSERT ALL
+INTO manufacturer(MfName, City, State)
+VALUES('DELL','Pierre','South Dakota')
+INTO manufacturer(MfName, City, State)
+VALUES('HP','Palo Alto','California')
+INTO manufacturer(MfName, City, State)
+VALUES('MSI','New Taipei City','Taiwan')
+SELECT * FROM DUAL;
+
+
+
+INSERT ALL
+INTO employee(EmployeeId, EmpName, Phone, Email, area_code)
+VALUES(1001,'TONY',7012068559,'xyz@gmail.com',211056)
+INTO employee(EmployeeId, EmpName, Phone, Email, area_code)
+VALUES(1002,'ROY',8801068559,'abc@gmail.com',311066)
+INTO employee(EmployeeId, EmpName, Phone, Email, area_code)
+VALUES(1003,'MANU',9812068333,'pqr@gmail.com',215556)
+INTO employee(EmployeeId, EmpName, Phone, Email, area_code)
+VALUES(1004,'ANU',7012060059,'mno@gmail.com',401055)
+INTO employee(EmployeeId, EmpName, Phone, Email, area_code)
+VALUES(1005,'TIM',7500011559,'tuv@gmail.com',211048)
+SELECT * FROM DUAL;
+
+
+INSERT ALL
+INTO computer(SerilNumber, MfName, Model, Weight, EmployeeId, use)
+VALUES(101220562344,'DELL','XPS',2.45,1002,'IN USE')
+INTO computer(SerilNumber, MfName, Model, Weight, EmployeeId, use)
+VALUES(101255233344,'DELL','VOSTRO',2.85,1001,'IN USE')
+INTO computer(SerilNumber, MfName, Model, Weight, EmployeeId, use)
+VALUES(101226641021,'HP','ENVY',2.00,1003,'IN USE')
+INTO computer(SerilNumber, MfName, Model, Weight, EmployeeId, use)
+VALUES(101304895210,'MSI','MODERN',3.00,1004,'NO USE')
+INTO computer(SerilNumber, MfName, Model, Weight, EmployeeId, use)
+VALUES(10180226952100,'DELL','XPS',2.45,1005,'IN USE')
+SELECT * FROM DUAL;
+
+===============================================================================
+/*Q1*/
+
+SELECT MfName AS MANUFACTURER_NAME FROM manufacturer WHERE State='South Dakota';
+
+===============================================================================
+/*Q2*/
+
+SELECT AVG(Weight) AS Average_Weight  FROM computer WHERE use='IN USE';
+
+===============================================================================
+/*Q3*/
+
+SELECT EmpName AS Employee_Names FROM employee WHERE area_code LIKE '2%';
+
+=============================================================================
+/*Q4*/
+
+SELECT SerilNumber FROM computer WHERE weight<(SELECT AVG(Weight) FROM computer);
+
+==============================================================================
+/*Q5*/
+
+SELECT * FROM manufacturer WHERE Mfname=(SELECT Mfname  FROM computer WHERE use='NO USE');
+
+==============================================================================
+
+/*Q6*/
+
+CREATE OR REPLACE VIEW detail_emp_manuf AS SELECT EmpName, SerilNumber, City FROM computer C JOIN manufacturer M ON C.Mfname=M.Mfname JOIN employee E ON E.EmployeeId=C.EmployeeId;
+
+select * from detail_emp_manuf
+
+==============================================================================
+/*Q7*/
+
+CREATE OR REPLACE PROCEDURE acceptEm(EmployeeId IN NUMBER)
+IS
+  s computer.SerilNumber%TYPE;
+  m computer.MfName%TYPE;
+  mM computer.Model%TYPE;
+  w computer.Weight%TYPE;
+  E computer.EmployeeId%TYPE;
+BEGIN
+  E:=EmployeeId;
+  SELECT SerilNumber, MfName, Model, Weight INTO s, m, mM, w FROM computer WHERE EmployeeId=E;
+  DBMS_OUTPUT.PUT_LINE('SerilNumber '||s||' manufacturer name '||m||' model '||mM||' weight of computer '||w);
+END;
+
+DECLARE
+  e computer.employeeID%TYPE;
+BEGIN
+  e:=:emp_id;
+  acceptEm(e);
+end;
+
+
