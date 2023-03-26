@@ -75,12 +75,12 @@ select empName,empNo,salary, ROUND(salary+(salary*0.15)) as "New salary" from em
 SELECT empName, LPAD(salary,15,'$') as "SALARY LPAD" from empl;
 
 ==========================================================================
-/*Q7*/
+/*Q8*/
 
 SELECT empName,commission, NVL(TO_CHAR(COMMISSION),'NO COMMISSION')updating from empl;  /*NVL is to replace null , TO_Char(character) is convert number to string values*/
 
 ==========================================================================
-/*Q8*/
+/*Q9*/
 
 create table std(
    firstName varchar(15) unique,
@@ -94,7 +94,7 @@ select * from std;
 select * from std where length(firstname)=10;
 
 =======================================================================
-/*Q9*/
+/*Q10*/
 
 create table manager(
    managerName varchar2(10),
@@ -118,7 +118,7 @@ select managerid  , sum(salary) from emply group by managerid  having  min(salar
 
 
 =======================================================================
-/*Q10*/
+/*Q11*/
 
 create table emy(
   e_name varchar2(20),
@@ -140,12 +140,12 @@ SELECT next_month('03-17-2023') FROM DUAL;
 
 
 =========================================================================
-/*Q11*/
+/*Q12*/
 
 SELECT e_name, hire_date, ROUND(MONTHS_BETWEEN(sysdate,hire_date)) AS "Months Worked" FROM emy;
 
 ===========================================================================
-/*Q12*/
+/*Q13*/
 
 SELECT e_name, salary, ((CEIL(salary/1000)*1000*12)*0.3)"Bonus" FROM emy; /*CEIL is use for return nearest largest integer*/
 
