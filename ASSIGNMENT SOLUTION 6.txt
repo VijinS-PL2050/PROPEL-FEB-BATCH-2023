@@ -1,0 +1,217 @@
+
+=======================================PROCEDURES====================================================
+select * from dept
+
+
+/*Q1*/
+
+CREATE OR REPLACE FUNCTION no_Of_emp(DE IN number)
+RETURN number
+IS
+  d dept.deptno%TYPE;
+  x number;
+BEGIN
+  d:=DE;
+  SELECT COUNT(*) INTO x
+  FROM emp
+  WHERE deptno=d;
+  RETURN x;
+END;
+
+
+DECLARE
+   c number;
+   id int;
+BEGIN
+   id:=:deptid;
+   c:= no_Of_Emp(id);
+   dbms_output.put_line('Total no. of employee in the deprt is '||c);
+END;
+
+========================================================================================================================
+
+/*Q2*/
+
+CREATE OR REPLACE FUNCTION percentScored(mark IN number, maxMark IN number)
+RETURN number
+IS
+  m number;
+  mM number;
+  p number;
+BEGIN
+  m:=mark;
+  mM:=maxMark;
+  p:=((m/mM)*100);
+  RETURN p;
+END;
+
+
+DECLARE
+  mark number;
+  maxMark number;
+  perScore number;
+BEGIN
+  mark:=:MARK;
+  maxMark:=:MAX_MARK;
+  perScore:=percentScored(mark,maxMark);
+  dbms_output.put_line('PERCENTAGE SCORED = '||perScore);
+END;
+
+===============================================================================================================================
+
+/*Q3*/
+
+CREATE OR REPLACE PROCEDURE d_detail(empId IN number)
+IS
+  Ee emp%ROWTYPE;
+  D dept%ROWTYPE;
+  E emp.EMPNO%TYPE;
+BEGIN
+  E:=empId;
+  SELECT emp.*  INTO Ee FROM emp JOIN dept ON emp.deptno=dept.deptno WHERE empno=E;
+  SELECT dept.*  INTO D FROM emp JOIN dept ON emp.deptno=dept.deptno WHERE empno=E;
+  DBMS_OUTPUT.PUT_LINE('EMPNO :'||Ee.EMPNO||' ENAME :'||Ee.ENAME||' JOB :'||Ee.JOB||' Manager name :'||Ee.MGR||' HIREDATE :'||Ee.HIREDATE||' SALARY :'||Ee.SAL||' COMMISSION :'||Ee.COMM||' DEPT NO :'||D.DEPTNO||' DEPARTMENT NAME :'||D.DNAME||' LOCATION :'||D.LOC);
+END;
+
+
+DECLARE
+  E emp.EMPNO%TYPE;
+BEGIN
+  E:=:empId;
+  d_detail(E);
+END;
+
+==============================================================================================================
+
+/*Q4*/
+
+CREATE OR REPLACE FUNCTION calAvgSal(deptNo IN number)
+RETURN number
+IS
+ avg_Sal number;
+ D EMP.DEPTNO%TYPE;
+BEGIN
+ D:= deptNo;
+ SELECT AVG(sal) INTO avg_Sal FROM emp WHERE DEPTNO=D;
+ RETURN avg_Sal;
+END;
+
+select * from DEPT
+
+
+DECLARE
+  C NUMBER;
+  D emp.DEPTNO%TYPE;
+BEGIN
+  D:=:deptNo;
+  C:=calAvgSal(D);
+  DBMS_OUTPUT.PUT_LINE('AVERAGE SAL :'||C);
+END;
+
+
+======================================================================================================================
+
+/*Q5*/
+
+
+CREATE OR REPLACE PROCEDURE DULIPI_VAL_Dept( DEPTNO IN dept.DEPTNO%TYPE, DNAME IN dept.DNAME%TYPE, LOC IN dept.LOC%TYPE)
+IS
+BEGIN
+  INSERT INTO DEPT VALUES(DEPTNO,DNAME,LOC);
+  Dbms_output.put_line(' Inserted sucessfully');
+EXCEPTION
+  WHEN DUP_VAL_ON_INDEX THEN
+  Dbms_output.put_line(' DULPICATE VALUES');  
+END;
+
+DECLARE
+  N dept.DNAME%TYPE;
+  D dept.DEPTNO%TYPE;
+  L dept.LOC%TYPE;
+BEGIN
+  D:=:deptNo;
+  N:=:dept_Name;
+  L:=:Location;
+  DULIPI_VAL_Dept(D,N,L);
+END;
+
+=======================================================================================================================
+
+/*Q6*/
+
+CREATE OR REPLACE PROCEDURE insert_Emp(EMPNO IN emp.EMPNO%TYPE, ENAME IN emp.ENAME%TYPE, JOB IN emp.JOB%TYPE, MGR IN emp.MGR%TYPE, HIREDATE IN emp.HIREDATE%TYPE, SAL IN emp.SAL%TYPE, COMM IN emp.COMM%TYPE, DEPTNO IN emp.DEPTNO%TYPE)
+IS
+    error Exception;
+    PRAGMA EXCEPTION_INIT(error,-02291);
+BEGIN
+  INSERT INTO emp VALUES(EMPNO,ENAME,JOB,MGR,HIREDATE,SAL,COMM,DEPTNO);
+  Dbms_output.put_line(' Insert successfully');
+EXCEPTION
+    WHEN error THEN
+    dbms_output.put_line('Integrity constraint Error');
+END;
+
+
+DECLARE
+  E emp.EMPNO%TYPE;
+  N emp.ENAME%TYPE;
+  J emp.JOB%TYPE;
+  M emp.MGR%TYPE;
+  H emp.HIREDATE%TYPE;
+  S emp.SAL%TYPE;
+  C emp.COMM%TYPE;
+  D emp.DEPTNO%TYPE;
+BEGIN
+  E:=:EMPNO;
+  N:=:ENAME;
+  J:=:JOB;
+  M:=:MGR;
+  H:=:HIREDATEE;
+  S:=:SAL;
+  C:=:COMM;
+  D:=:DEPTNO;  
+  insert_Emp(E,N,J,M,H,S,C,D);
+END;
+
+======================================================================================================
+/*Q7*/
+
+CREATE OR REPLACE PROCEDURE insert_Dept( DEPTNO IN dept.DEPTNO%TYPE, DNAME IN dept.DNAME%TYPE, LOC IN dept.LOC%TYPE)
+IS
+BEGIN
+  INSERT INTO DEPT VALUES(DEPTNO,DNAME,LOC);
+  Dbms_output.put_line(' Inserted sucessfully');
+END;
+
+DECLARE
+  N dept.DNAME%TYPE;
+  D dept.DEPTNO%TYPE;
+  L dept.LOC%TYPE;
+BEGIN
+  D:=:deptNo;
+  N:=:dept_Name;
+  L:=:Location;
+  insert_Dept(D,N,L);
+END;
+
+======================================================================================================
+/*Q8*/
+
+CREATE OR REPLACE PROCEDURE update_Emp( E IN emp.EMPNO%TYPE, S IN emp.SAL%TYPE )
+IS
+BEGIN
+  UPDATE EMP SET SAL=S WHERE EMPNO=E;
+  Dbms_output.put_line(' Updated successfully');
+END;
+
+
+
+DECLARE
+  E emp.EMPNO%TYPE;
+  S emp.SAL%TYPE;
+BEGIN
+  E:=:empNo;
+  S:=:New_Salary;
+  update_Emp(E,S);
+END;
+
